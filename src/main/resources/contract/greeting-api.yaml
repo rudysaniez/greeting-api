@@ -1,0 +1,156 @@
+---
+openapi: 3.0.2
+info:
+  title: Greeting-api
+  version: 1.0.0
+  description: Simple Greeting API
+  contact:
+    name: Rudy SANIEZ
+    url: https://github.com/rudysaniez
+    email: rudysaniez@laposte.net
+paths:
+  /greetings/{id}:
+    summary: Greeting-api is a simple API.
+    get:
+      tags:
+      - greeting-controller
+      responses:
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorInfo'
+          description: Greeting not found.
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Greeting'
+          description: Greeting found.
+      operationId: getGreeting
+    parameters:
+    - name: id
+      description: Greeting id.
+      schema:
+        type: string
+      in: path
+      required: true
+  /greetings:
+    get:
+      tags:
+      - greeting-controller
+      parameters:
+      - name: name
+        description: Name of greeting target.
+        schema:
+          type: string
+        in: query
+        required: true
+      - name: firstname
+        description: Firstname of greeting target.
+        schema:
+          type: string
+        in: query
+        required: true
+      responses:
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorInfo'
+          description: Greeting not found.
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Greeting'
+          description: Greeting found.
+      operationId: findGreetings
+      summary: Research greetings
+    post:
+      requestBody:
+        description: This greeting must be saved.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Greeting'
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Greeting'
+          description: The greeting has been created.
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Greeting'
+          description: The greeting has been updated.
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorInfo'
+          description: The content of Greeting is incorrect.
+      operationId: saveGreeting
+      summary: Save a greeting
+components:
+  schemas:
+    Greeting:
+      title: Root Type for Greeting
+      description: ""
+      required:
+      - subject
+      - message
+      - name
+      - firstname
+      type: object
+      properties:
+        id:
+          description: Greeting identifier.
+          type: string
+        message:
+          description: Greeting message.
+          type: string
+        firstname:
+          description: Who are these greetings for?
+          type: string
+        name:
+          description: Who are these greetings for?
+          type: string
+        creationDate:
+          format: date-time
+          description: Greeting creation date.
+          type: string
+        version:
+          description: Version number.
+          type: string
+        subject:
+          description: ""
+          type: string
+      example:
+        id: "1"
+        subject: How are you?
+        message: Greetings comrade !
+        firstname: Rudy
+        name: Saniez
+        creationDate: 2020-08-27T11:56:35.474219+02:00
+        version: API greetings version 1.0
+    HttpErrorInfo:
+      title: Root Type for HttpErrorInfo
+      description: ""
+      type: object
+      properties:
+        timestamp:
+          format: date-time
+          type: string
+        httpStatus:
+          type: string
+        message:
+          type: string
+      example:
+        timestamp: 2020-08-27T09:54:02.354283+02:00
+        httpStatus: NOT_FOUND
+        message: The greeting 13 doesn't not exist

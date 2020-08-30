@@ -1,0 +1,67 @@
+
+logging:
+  level:
+    root: warn
+    
+server:
+  port: 7000
+  servlet:
+    context-path: /api/v1
+    
+management:
+  endpoints:
+    web:
+      exposure:
+         include: info,health,env,metrics
+      base-path: /management    
+    
+spring:
+  
+  jackson:
+    deserialization:
+      accept-single-value-as-array: true
+    serialization:
+      write-dates-as-timestamps: false
+    generator:
+      write-numbers-as-strings: true
+    default-property-inclusion: NON_NULL
+    date-format: yyyy-MM-dd'T'HH:mm:ssZ
+    
+---
+spring.profiles: dev
+
+logging:
+  level:
+    root: info
+    com.me.work.greeting.api: debug
+
+management:
+  endpoints:
+    web:
+      exposure:
+         include: health
+      
+---
+spring.profiles: docker
+
+logging:
+  level:
+    root: info
+    com.me.work.greeting.api: debug
+
+server:
+  port: 8081
+    
+management:
+  endpoints:
+    web:
+      exposure:
+         include: info,health,env,metrics
+         
+spring:
+  data:
+    mongodb:
+      host: greeting-api-database
+      port: 27017
+      database: greetingsdb
+        
