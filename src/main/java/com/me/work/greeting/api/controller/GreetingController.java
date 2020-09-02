@@ -98,7 +98,7 @@ public class GreetingController implements GreetingsApi {
 				 com.me.work.greeting.api.bo.Greeting greetingUpdated = greetingRepository.save(greetingToUpdate);
 				 
 				 if(log.isDebugEnabled())
-					 log.debug(" > This greeting has been updated : {1}", greetingUpdated.toString());
+					 log.debug(" > This greeting has been updated : {}", greetingUpdated.toString());
 				 
 				 return ResponseEntity.ok(greetingMapper.toModel(greetingUpdated));
 			 }
@@ -111,7 +111,7 @@ public class GreetingController implements GreetingsApi {
 				 com.me.work.greeting.api.bo.Greeting greetingCreated = greetingRepository.save(greetingMapper.toBusiness(greeting));
 				 
 				 if(log.isDebugEnabled())
-					 log.debug(" > This greeting has been created : {1}", greetingCreated.toString());
+					 log.debug(" > This greeting has been created : {}", greetingCreated.toString());
 				 
 				 return ResponseEntity.status(HttpStatus.CREATED).body(greetingMapper.toModel(greetingCreated));
 			 }
@@ -133,7 +133,7 @@ public class GreetingController implements GreetingsApi {
 				com.me.work.greeting.api.bo.Greeting greetingUpdated = greetingRepository.save(greetingToUpdate);
 				
 				if(log.isDebugEnabled())
-					log.debug(" > This greeting has been updated : {1}", greetingUpdated.toString());
+					log.debug(" > This greeting has been updated : {}", greetingUpdated.toString());
 				
 				return ResponseEntity.ok(greetingMapper.toModel(greetingUpdated));
 			}
@@ -146,10 +146,31 @@ public class GreetingController implements GreetingsApi {
 				com.me.work.greeting.api.bo.Greeting greetingCreated = greetingRepository.save(greetingMapper.toBusiness(greeting));
 				
 				if(log.isDebugEnabled())
-					log.debug(" > This greeting has been created : {1}", greetingCreated.toString());
+					log.debug(" > This greeting has been created : {}", greetingCreated.toString());
 				
 				return ResponseEntity.status(HttpStatus.CREATED).body(greetingMapper.toModel(greetingCreated));
 			}
 		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public ResponseEntity<Greeting> deleteGreeting(String id) {
+		
+		Optional<com.me.work.greeting.api.bo.Greeting> greetingToDelete = greetingRepository.findById(id);
+		
+		if(greetingToDelete.isPresent()) {
+			
+			greetingRepository.delete(greetingToDelete.get());
+			
+			if(log.isDebugEnabled())
+				log.debug("This greeting has been deleted : {}", greetingToDelete.get().toString());
+			
+			return ResponseEntity.ok(greetingMapper.toModel(greetingToDelete.get()));
+		}
+		
+		throw new NotFoundException(String.format("The greeting with id %s doesn't not exist.", id));
 	}
 }

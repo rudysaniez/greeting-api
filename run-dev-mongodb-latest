@@ -1,0 +1,7 @@
+#!/bin/bash
+
+set -e 
+
+cd $(dirname $0)
+
+docker run --rm -ti --name mongodb -d -p 27017:27017 mongo:latest

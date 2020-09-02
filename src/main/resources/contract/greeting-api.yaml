@@ -15,19 +15,37 @@ paths:
       tags:
       - greeting-controller
       responses:
-        "404":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorInfo'
-          description: Greeting not found.
         "200":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Greeting'
-          description: Greeting found.
+          description: The greeting has been found.
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorInfo'
+          description: The greeting doesn't not exist.
       operationId: getGreeting
+    delete:
+      tags:
+      - greeting-controller
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Greeting'
+          description: The greeting has been deleted.
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorInfo'
+          description: The greeting doesn't not exist.
+      operationId: deleteGreeting
+      summary: Delete a greeting
     parameters:
     - name: id
       description: Greeting id.
@@ -58,13 +76,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HttpErrorInfo'
-          description: Greeting not found.
+          description: The greeting doesn't not exist.
         "200":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Greeting'
-          description: Greeting found.
+          description: The greeting has been found.
       operationId: findGreetings
       summary: Research greetings
     post:

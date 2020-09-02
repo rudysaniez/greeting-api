@@ -1,0 +1,38 @@
+
+version: "3.8"
+  
+services:
+  
+  greeting-api-database:
+    image: mongo:3.2.4
+    container_name: greeting-api-database
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 250M
+        reservations:
+          cpus: '0.25'
+          memory: 150M
+    ports:
+      - 27017:27017
+    command: --smallfiles
+
+
+  greeting-api:
+    build: .
+    container_name: greeting-api
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 250M
+        reservations:
+          cpus: '0.25'
+          memory: 150M
+    ports:
+      - "8080:8080"
+    depends_on:
+      - greeting-api-database
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
